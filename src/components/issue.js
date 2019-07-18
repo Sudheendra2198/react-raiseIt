@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
     container: {
         margin: 5,
         height: '20%',
+        width: '90%',
         borderRadius: 5,
         borderWidth: 0.5,
         flexDirection: 'row',
@@ -24,7 +25,6 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     image: {
-        margin: 2,
         width: '40%',
         height: '80%',
         backgroundColor: 'blue'
