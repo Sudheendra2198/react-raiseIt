@@ -1,0 +1,22 @@
+import React from 'react';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { LoginPage, Dashboard } from '../screens';
+
+const MainStackNavigator = createStackNavigator(
+    {
+      LoginPage,
+      Dashboard
+    },
+    {
+        initialRouteName: 'LoginPage',
+        headerMode: 'none'
+    }
+);
+
+const AppContainer = createAppContainer(MainStackNavigator);
+
+export default class AppNavigator extends React.Component {
+  render() {
+    return <AppContainer />;
+  }
+}
