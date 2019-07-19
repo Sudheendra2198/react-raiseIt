@@ -8,6 +8,7 @@ import {
     TouchableHighlight 
 } from 'react-native';
 import Constants from '../constants';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class loginBox extends React.Component {
     constructor(props) {
@@ -23,6 +24,10 @@ class loginBox extends React.Component {
       }
 
     render() {
+        const { username, password } = this.state;
+        let disabled = false
+        if(username.length==0 || password.length==0)
+            disabled = true
         return (
             <View style={styles.container}>
                 <Text style={styles.loginTitle}>
@@ -42,15 +47,13 @@ class loginBox extends React.Component {
                     onChangeText={(password) => this.setState({password})}
                     value= {this.state.password}
                 />
-                <TouchableHighlight
-                    style={styles.submitButton}
+                <TouchableOpacity
+                    style={[styles.submitButton, disabled ? {backgroundColor: 'grey'} : null]}
+                    onPress={this.loginPressed}
+                    disabled={disabled}
                 >
-                    <Button
-                        onPress = {this.loginPressed}
-                        title="Sign In"
-                        color="#BA0212"
-                    />
-                </TouchableHighlight>
+                    <Text style={styles.submitText}>Sign In</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -74,12 +77,18 @@ const styles = StyleSheet.create({
         borderBottomColor: 'black'
     },
     submitButton: {
-        marginTop: 20,
+        marginTop: 30,
         backgroundColor: '#BA0212',
-        height: 40,
-        width: 100,
+        height: 45,
+        width: 110,
         borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
+    submitText: {
+        color: 'white',
+        fontSize: 20
+    }
 })
 
 export default loginBox
