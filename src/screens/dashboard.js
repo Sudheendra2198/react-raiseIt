@@ -1,52 +1,33 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import Constants from '../constants'
 import Issue from '../components/issue'
-import badRoads from '../assets/badRoads.jpg'
-import water from '../assets/water.jpg'
-import light from '../assets/light.jpg'
-import garbage from '../assets/garbage.jpeg'
 import add from '../assets/add.jpg'
-
+import data from './data'
+import openBox from '../assets/openBox.png'
 
 
 export default class Dashboard extends React.Component {
-    render() {
-        const data = [
-            {
-               id: 1,
-               imgSrc: badRoads,
-               desc: "Road has many potholes",
-               location: "Nizampet, Kukatpally"     
-            },
-            {
-                id: 2,
-                imgSrc: water,
-                desc: "Water polluted critically",
-                location: "Musi, Amberpet"      
-            },
-            {
-                id: 3,
-                imgSrc: light,
-                desc: "Street light not working",
-                location: "KPHB, Kukatpally"      
-            },
-            {
-                id: 4,
-                imgSrc: garbage,
-                desc: "Overflowing garbage",
-                location: "Nizampet, Kukatpally"      
-            },
 
-        ]
-        let disp = data.map(item => {
-            return <Issue 
-                    key={item.id} 
-                    imgSrc={item.imgSrc}
-                    desc={item.desc}
-                    location={item.location} 
-                    />
-        })
+    renderIssues = ({item}) => (
+        <Issue 
+            key={item.id} 
+            imgSrc={item.imgSrc}
+            desc={item.desc}
+            location={item.location} 
+            days={item.days}
+            issuePressed={() => this.handleIssuePressed(item.id)}
+        />
+    )
+
+    handleIssuePressed = id => {
+        const item = data.find(d => d.id === id);
+        alert(item.desc);
+    }
+
+    keyExtractor = (item, index) => item.id.toString();
+
+    render() {
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -54,8 +35,17 @@ export default class Dashboard extends React.Component {
                         {Constants.title}
                     </Text>
                 </View>
+                <View style={styles.openIssues}>
+                    <Image source={openBox} style={styles.openBoxImage}/>
+                    <Text style={styles.openIssuesTitle}>Open Issues</Text>
+                </View>
                 <View style={styles.display}>
-                    {disp}
+                    <FlatList
+                        data = {data}
+                        style={{flex: 1}}
+                        keyExtractor = {this.keyExtractor}
+                        renderItem={this.renderIssues}
+                    />
                 </View>
                 <TouchableOpacity
                     style={styles.raiseButton}
@@ -80,7 +70,9 @@ const styles = StyleSheet.create({
     },
     display: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+       
+       
     },
     title: {
         fontSize: 40,
@@ -99,5 +91,20 @@ const styles = StyleSheet.create({
     addButton: {
         height: 60,
         width: 60
+    },
+    openBoxImage: {
+        height: 50,
+        width: '20%',
+        marginTop: 4
+    },
+    openIssuesTitle: {
+        color: '#BA0212',
+        fontSize: 25,
+    },
+    openIssues: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: '10%',
+        borderBottomWidth: 1
     }
 })

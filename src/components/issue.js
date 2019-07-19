@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 
 const issue = (props) => {
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={props.issuePressed}>
             <Image 
                 style={styles.image}
                 source={props.imgSrc}
@@ -12,28 +12,25 @@ const issue = (props) => {
             <View style={styles.description}>
                 <Text numberOfLines={1} style={{fontSize:20}}>{props.desc}</Text>
                 <Text style={{fontSize:15}}>{props.location}</Text>
+                <Text style={{position:'absolute', bottom:10}}>Added {props.days} days ago</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        margin: 5,
-        height: '20%',
-        width: '95%',
+        marginTop: 10,
+        height: 100,
         borderRadius: 5,
         borderWidth: 0.5,
         flexDirection: 'row',
         alignItems:'center',
-        //backgroundColor: 'red',
     },
     image: {
         width: '35%',
         height: '80%',
         marginLeft: 8,
-        //backgroundColor: 'green',
-        //justifyContent: 'center'
     },
     description: {
         height:'100%',
@@ -41,7 +38,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginTop: 5,
         flexWrap: 'wrap'
-        //backgroundColor: 'blue',
     },
 
 })
