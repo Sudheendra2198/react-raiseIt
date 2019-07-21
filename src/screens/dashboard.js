@@ -7,6 +7,7 @@ import data from './data'
 import openBox from '../assets/openBox.png'
 
 
+
 export default class Dashboard extends React.Component {
 
     renderIssues = ({item}) => (
@@ -23,6 +24,37 @@ export default class Dashboard extends React.Component {
     handleIssuePressed = id => {
         const item = data.find(d => d.id === id);
         alert(item.desc);
+    }
+
+    raisePressed = () => {
+        const { navigation } = this.props;
+        navigation.navigate("RaiseIssue");
+        // const issue = {
+        //     desc: "Roads are clogged",
+        //     location: "Kukatpally"
+        // }
+
+        // fetch("https://us-central1-react-raiseit.cloudfunctions.net/storeImage",{
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //         image: img
+        //     })
+        // })
+        // .catch(err => {throw err})
+        // .then(res => res.json())
+        // .then(parsedRes => {
+        //     alert(JSON.stringify(parsedRes))
+        // })
+
+        // fetch("https://react-raiseit.firebaseio.com/issues.json",{
+        //     method: "POST",
+        //     body: JSON.stringify(issue)
+        // })
+        // .catch(err => alert(JSON.stringify(err)))
+        // .then(res => res.json())
+        // .then(parsedRes => {
+        //     alert(JSON.stringify(parsedRes))
+        // });
     }
 
     keyExtractor = (item, index) => item.id.toString();
@@ -49,7 +81,7 @@ export default class Dashboard extends React.Component {
                 </View>
                 <TouchableOpacity
                     style={styles.raiseButton}
-                    onPress={()=> alert("Raise Pressed")}
+                    onPress={this.raisePressed}
                 >
                     <Image source={add} style={styles.addButton} />
                 </TouchableOpacity> 
