@@ -57,10 +57,13 @@ export default class RaiseIssue extends React.Component {
         .catch(err => {throw err})
         .then(res => res.json())
         .then(parsedRes => {
+            const month = new Date().getMonth()+1;
+            const date = new Date().getDate() + "/" + month +"/"+new Date().getFullYear();
             const issue= {
                 image: parsedRes.imageUrl,
                 desc: desc,
-                location: location
+                location: location,
+                date: date
             }
             fetch("https://react-raiseit.firebaseio.com/issues.json",{
                 method: "POST",

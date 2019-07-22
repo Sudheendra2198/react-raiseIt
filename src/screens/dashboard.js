@@ -40,7 +40,7 @@ export default class Dashboard extends React.Component {
             imgSrc={item.image}
             desc={item.desc}
             location={item.location} 
-            //days={item.days}
+            date={item.date}
             issuePressed={() => this.handleIssuePressed(item.id)}
         />
     )

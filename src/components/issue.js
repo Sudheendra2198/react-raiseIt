@@ -12,7 +12,7 @@ const issue = (props) => {
             <View style={styles.description}>
                 <Text numberOfLines={1} style={{fontSize:20}}>{props.desc}</Text>
                 <Text style={{fontSize:15}}>{props.location}</Text>
-                {/* <Text style={{position:'absolute', bottom:10}}>Added {props.days} days ago</Text> */}
+                <Text>Added on {props.date}</Text>
             </View>
         </TouchableOpacity>
     )
@@ -34,9 +34,8 @@ const styles = StyleSheet.create({
     },
     description: {
         height:'100%',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-evenly',
         marginLeft: 10,
-        marginTop: 5,
         flexWrap: 'wrap'
     },
 
