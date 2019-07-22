@@ -7,12 +7,12 @@ const issue = (props) => {
         <TouchableOpacity style={styles.container} onPress={props.issuePressed}>
             <Image 
                 style={styles.image}
-                source={props.imgSrc}
+                source={{uri: props.imgSrc}}
             />
             <View style={styles.description}>
                 <Text numberOfLines={1} style={{fontSize:20}}>{props.desc}</Text>
                 <Text style={{fontSize:15}}>{props.location}</Text>
-                <Text style={{position:'absolute', bottom:10}}>Added {props.days} days ago</Text>
+                {/* <Text style={{position:'absolute', bottom:10}}>Added {props.days} days ago</Text> */}
             </View>
         </TouchableOpacity>
     )

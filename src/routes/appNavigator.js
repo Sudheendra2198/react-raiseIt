@@ -9,7 +9,7 @@ const MainStackNavigator = createStackNavigator(
       RaiseIssue
     },
     {
-        initialRouteName: 'RaiseIssue',
+        initialRouteName: 'LoginPage',
         headerMode: 'none'
     }
 );

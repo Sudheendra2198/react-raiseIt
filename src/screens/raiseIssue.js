@@ -1,13 +1,24 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native'
+import { 
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    Button,
+    Image,
+    TextInput
+} from 'react-native'
 import Constants from '../constants'
 import ImagePicker from 'react-native-image-picker'
+import takePic from '../assets/takePic.png'
 
 export default class RaiseIssue extends React.Component {
 
     state = {
-        uri: "",
-        base64: ""
+        source:takePic,
+        base64: "",
+        desc: "",
+        location: ""
     }
 
     chooseImagePressed = () => {
@@ -21,21 +32,22 @@ export default class RaiseIssue extends React.Component {
             } else if (response.customButton) {
               console.log('User tapped custom button: ', response.customButton);
             } else {
-              const source = { uri: response.uri };
-          
-              // You can also display the image using data:
-              //const source = { uri: 'data:image/jpeg;base64,' + response.data };
+              const source = { uri: 'data:image/jpeg;base64,' + response.data };
           
               this.setState({
-                uri: source,
+                source:source,
                 base64: response.data
-              },() => alert(JSON.stringify(this.state.uri)));
+              });
             }
           });
           
     }
 
     uploadPressed = () => {
+
+        const { desc, location } = this.state;
+        const { navigation } = this.props;
+
         fetch("https://us-central1-react-raiseit.cloudfunctions.net/storeImage",{
             method: "POST",
             body: JSON.stringify({
@@ -45,11 +57,27 @@ export default class RaiseIssue extends React.Component {
         .catch(err => {throw err})
         .then(res => res.json())
         .then(parsedRes => {
-            alert(JSON.stringify(parsedRes))
+            const issue= {
+                image: parsedRes.imageUrl,
+                desc: desc,
+                location: location
+            }
+            fetch("https://react-raiseit.firebaseio.com/issues.json",{
+                method: "POST",
+                body: JSON.stringify(issue)
+            })
+            .catch(err => console.log(err))
+            .then(res => res.json())
+            .then(parsedRes => {
+                console.log(parsedRes);
+                alert("Uploaded Successfully!");
+                navigation.navigate("Dashboard");
+            });
         })
     }
 
     render() {
+        const { source } = this.state;
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -58,11 +86,25 @@ export default class RaiseIssue extends React.Component {
                     </Text>
                 </View>
                 <View style={styles.display}>
-                    <TouchableOpacity onPress={this.chooseImagePressed}
-                    style={styles.chooseImageButton}
+               <TouchableOpacity onPress={this.chooseImagePressed}
+                    style={styles.chooseImageSection}
                     >
-                        <Text>Choose Image</Text>
+                        <Image source={source} style={styles.image}/>
                     </TouchableOpacity>
+                    <View style={{width:'90%'}}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(desc) => this.setState({desc})}
+                            value={this.state.desc}
+                            placeholder="Enter a description"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(location) => this.setState({location})}
+                            value={this.state.location}
+                            placeholder="Enter location"
+                        />
+                    </View>
                     <View >
                         <Button title="Upload" onPress={this.uploadPressed}/>
                     </View>
@@ -90,14 +132,24 @@ const styles = StyleSheet.create({
         fontSize: 40,
         color: 'white'
     },
-    chooseImageButton: {
-        height: 80,
-        width: 80,
-        backgroundColor: '#BA0212',
-        borderRadius: 8
+    chooseImageSection: {
+        height: 250,
+        width: '90%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 5,
+        marginBottom: 5
     },
     image: {
-        height: 200,
-
+        width: '100%',
+        height: 250
+    },
+    input: {
+        height: 40,
+        width:'90%',
+        borderColor: 'gray',
+        borderBottomWidth: 1,
+        margin: 10,
+        fontSize: 20
     }
 })
