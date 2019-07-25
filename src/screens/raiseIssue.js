@@ -63,7 +63,8 @@ export default class RaiseIssue extends React.Component {
                 image: parsedRes.imageUrl,
                 desc: desc,
                 location: location,
-                date: date
+                date: date,
+                upvotes: 0
             }
             fetch("https://react-raiseit.firebaseio.com/issues.json",{
                 method: "POST",
@@ -89,8 +90,9 @@ export default class RaiseIssue extends React.Component {
                     </Text>
                 </View>
                 <View style={styles.display}>
-               <TouchableOpacity onPress={this.chooseImagePressed}
-                    style={styles.chooseImageSection}
+                    <Text style={styles.instruction}>Take a Picture or Upload!</Text>
+                    <TouchableOpacity onPress={this.chooseImagePressed}
+                        style={styles.chooseImageSection}
                     >
                         <Image source={source} style={styles.image}/>
                     </TouchableOpacity>
@@ -126,6 +128,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#BA0212',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    instruction: {
+        fontSize: 25,
+        textAlign: 'center',
+        color: '#BA0212',
+        fontWeight: 'bold'
     },
     display: {
         flex: 1,

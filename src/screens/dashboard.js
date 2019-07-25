@@ -4,6 +4,7 @@ import Constants from '../constants'
 import Issue from '../components/issue'
 import add from '../assets/add.jpg'
 import openBox from '../assets/openBox.png'
+import { db } from '../config'
 
 
 
@@ -41,13 +42,15 @@ export default class Dashboard extends React.Component {
             desc={item.desc}
             location={item.location} 
             date={item.date}
+            upvotes={item.upvotes}
             issuePressed={() => this.handleIssuePressed(item.id)}
         />
     )
 
     handleIssuePressed = id => {
         const item = this.state.issues.find(d => d.id === id);
-        alert(item.desc);
+        const { navigation } = this.props;
+        navigation.navigate('Details', {item});
     }
 
     raisePressed = () => {

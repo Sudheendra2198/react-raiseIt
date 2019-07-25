@@ -1,15 +1,21 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import { LoginPage, Dashboard, RaiseIssue } from '../screens';
+import { 
+  LoginPage,
+  Dashboard,
+  RaiseIssue,
+  Details
+} from '../screens';
 
 const MainStackNavigator = createStackNavigator(
     {
       LoginPage,
       Dashboard,
-      RaiseIssue
+      RaiseIssue,
+      Details
     },
     {
-        initialRouteName: 'LoginPage',
+        initialRouteName: 'Dashboard',
         headerMode: 'none'
     }
 );
