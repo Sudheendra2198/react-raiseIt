@@ -64,7 +64,8 @@ export default class RaiseIssue extends React.Component {
                 desc: desc,
                 location: location,
                 date: date,
-                upvotes: 0
+                upvotes: 0,
+                isDone: false
             }
             fetch("https://react-raiseit.firebaseio.com/issues.json",{
                 method: "POST",
