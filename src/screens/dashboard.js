@@ -48,9 +48,20 @@ export default class Dashboard extends React.Component {
     )
 
     handleIssuePressed = id => {
-        const item = this.state.issues.find(d => d.id === id);
+        const { user } = this.props.navigation.state.params;
         const { navigation } = this.props;
-        navigation.navigate('Details', {item});
+        const item = this.state.issues.find(d => d.id === id);
+        if (user) {
+            navigation.navigate('Details', {
+                item,
+                user: true
+            });
+        } else {
+            navigation.navigate('Details', {
+                item,
+                user: false
+            });
+        }
     }
 
     raisePressed = () => {
@@ -61,6 +72,12 @@ export default class Dashboard extends React.Component {
     keyExtractor = (item, index) => item.id.toString();
 
     render() {
+        const { issues } = this.state;
+        const { user } = this.props.navigation.state.params;
+        let listData = issues;
+        if (!user) {
+            listData = issues.filter(issue => issue.isDone === false)
+        }
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -74,7 +91,7 @@ export default class Dashboard extends React.Component {
                 </View>
                 <View style={styles.display}>
                     <FlatList
-                        data = {this.state.issues}
+                        data = {listData}
                         refreshing={this.state.isFetching}
                         onRefresh= {
                             () => this.setState({
@@ -87,12 +104,12 @@ export default class Dashboard extends React.Component {
                         renderItem={this.renderIssues}
                     />
                 </View>
-                <TouchableOpacity
+                {user ? <TouchableOpacity
                     style={styles.raiseButton}
                     onPress={this.raisePressed}
                 >
                     <Image source={add} style={styles.addButton} />
-                </TouchableOpacity> 
+                </TouchableOpacity> : null }
             </View>
         )
     }

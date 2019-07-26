@@ -1,6 +1,8 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import Constants from '../constants'
+import Description from '../components/description'
+import VoteButtons from '../components/voteButtons'
 import { db } from '../config'
 
 export default class Details extends React.Component {
@@ -15,14 +17,28 @@ export default class Details extends React.Component {
         this.setState({item: params.item});
     }
 
-    upvoteHandler = () => {
+    voteHandler = (flag) => {
         const { item } = this.state;
         const { navigation } = this.props;
-        const newUpvote = item.upvotes + 1;
+        const newUpvote = flag===1 ? item.upvotes + 1 : item.upvotes - 1;
         db.ref('issues/' + item.id).update({upvotes: newUpvote})
         .then(()=>{
-            alert("Data saved successfully.");
+            alert("Voted successfully.");
             navigation.navigate('Dashboard');
+          }).catch((error)=> {
+            console.log("Data could not be saved." + error);
+          });
+    } 
+
+    resolveIssueHandler = () => {
+        const { item } = this.state;
+        const { navigation } = this.props;
+        db.ref('issues/' + item.id).update({isDone: true})
+        .then(()=>{
+            alert("Resolved successfully.");
+            navigation.navigate('Dashboard', {
+                user: false
+            });
           }).catch((error)=> {
             console.log("Data could not be saved." + error);
           });
@@ -30,8 +46,7 @@ export default class Details extends React.Component {
 
     render() {
         const { item } = this.state;
-        let isDone = true;
-        const status = "Resolved"
+        const { user } = this.props.navigation.state.params;
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -43,27 +58,17 @@ export default class Details extends React.Component {
                     <Image source={{uri: item.image}} style={styles.image}/>
                     
                 </View>
-                <View style={styles.line} />
+                
                 <View style={styles.descriptions}>
-                    <Text style={styles.descTitle}>Description:</Text>
-                        <Text style={styles.text}>{item.desc}</Text>
-                    <Text style={styles.descTitle}>Location:</Text>
-                        <Text style={styles.text}>{item.location}</Text>
-                    <Text style={styles.descTitle}>Upvotes:</Text>
-                        <Text style={styles.text}>{item.upvotes}</Text>
-                    <Text style={styles.descTitle}>Added on: <Text style={styles.text}>{item.date}</Text>
-                    </Text>
-                    <Text style={styles.descTitle}>Status: <Text style={[styles.text, isDone ? {color: 'green'} : {color: 'red'}]}>{status}</Text></Text>
-                    <View style={styles.line} />
+                    <Description item={item} />
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.upvoteButton} 
-                    onPress={this.upvoteHandler}>
-                        <Text style={{color: 'white', fontSize: 25}}>Upvote</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.upvoteButton, {backgroundColor: 'red'}]}>
-                        <Text style={{color: 'white', fontSize: 25}}>Downvote</Text>
-                    </TouchableOpacity>
+                    {user ? <VoteButtons upvotePressed={() => this.voteHandler(1)}
+                     downvotePressed={() => this.voteHandler(0)} /> :
+                     <TouchableOpacity style={styles.resolvedButton} 
+                        onPress={this.resolveIssueHandler}>
+                         <Text style={styles.resolveText}>Resolve Issue</Text>
+                     </TouchableOpacity> }
                 </View>
             </View>
         )
@@ -98,34 +103,21 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         justifyContent: 'center',
     },
-    text: {
-        fontSize: 20,
-        marginLeft: 5,
-        color: 'black'
-    },
-    line: {
-        borderBottomColor: 'black',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        marginTop: 5,
-    },
-    descTitle: {
-        fontWeight: 'bold',
-        fontSize: 25,
-        color: '#E74C3C',
-        marginTop: 10
-    },
     buttonContainer: {
         height: '10%',
-        flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
     },
-    upvoteButton: {
-        backgroundColor: 'green',
-        width: 150,
-        borderRadius: 20,
+    resolvedButton: {
+        width: '70%',
         height: 45,
+        backgroundColor: '#00680D',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 20
+    },
+    resolveText: {
+        color: '#E2E7E2',
+        fontSize: 25
     }
 })

@@ -31,7 +31,7 @@ class loginBox extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.loginTitle}>
-                    {Constants.loginTitle}
+                    {this.props.userType} {Constants.loginTitle}
                 </Text>
                 <TextInput
                     style= {styles.inputField}

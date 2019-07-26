@@ -15,7 +15,7 @@ const MainStackNavigator = createStackNavigator(
       Details
     },
     {
-        initialRouteName: 'Dashboard',
+        initialRouteName: 'LoginPage',
         headerMode: 'none'
     }
 );
