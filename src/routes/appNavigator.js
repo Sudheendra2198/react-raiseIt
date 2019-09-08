@@ -4,12 +4,14 @@ import {
   LoginPage,
   Dashboard,
   RaiseIssue,
-  Details
+  Details,
+  SignUpPage
 } from '../screens';
 
 const MainStackNavigator = createStackNavigator(
     {
       LoginPage,
+      SignUpPage,
       Dashboard,
       RaiseIssue,
       Details

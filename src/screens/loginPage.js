@@ -13,18 +13,47 @@ class LoginPage extends React.Component {
       adminSelected: false
     }
 
-    loginHandler = () => {
+    loginHandler = (username, password) => {
       const { userType } = this.state;
       if ( userType === 'User' ){ 
-        this.props.navigation.navigate('Dashboard',{
-          user: true
-        });
+          console.log(username)
+          console.log(password)
+            fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyB9TfJJZh3PHkbXuaW5wVm7IcByclxeLz8", {
+                method: "POST",
+                body : JSON.stringify({
+                    email: username,
+                    password: password,
+                    returnSecureToken: true
+                })
+            })
+            .catch(err => console.log(err))
+            .then(res => res.json())
+            .then(parsedRes => {
+                if (parsedRes.error) {
+                  alert("Error:"+parsedRes.error.message)
+                } else if( parsedRes.registered ){
+                  this.props.navigation.navigate('Dashboard',{
+                    user: true
+                  });
+                } else {
+                  alert("Wrong username or password")
+                }
+            })
       } else {
-        this.props.navigation.navigate('Dashboard',{
-          user: false
-        });
+        if( username === "Admin123" && password === "pwdadmin") {
+          this.props.navigation.navigate('Dashboard',{
+            user: false
+          });
+        } else {
+          alert("Invalid username or password");
+        }
       }
     }  
+
+    signUphandler = () => {
+      const { navigation } = this.props;
+      navigation.navigate('SignUpPage');
+    }
 
     tabPressed = flag => {
       if ( flag === 1){
@@ -63,7 +92,10 @@ class LoginPage extends React.Component {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.loginBox}>
-                    <LoginBox onLoginPressed ={this.loginHandler} userType={userType}/>
+                    <LoginBox 
+                      onLoginPressed ={this.loginHandler}
+                      onSignUpPressed={this.signUphandler} 
+                      userType={userType}/>
                 </View>
             </View>
         )

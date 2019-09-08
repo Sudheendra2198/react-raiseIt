@@ -4,8 +4,6 @@ import {
     Text,
     TextInput,
     StyleSheet,
-    Button,
-    TouchableHighlight 
 } from 'react-native';
 import Constants from '../constants';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -14,35 +12,31 @@ class loginBox extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
-            username: '',
+            email: '',
             password: '' 
         };
       }
 
-      loginPressed = () => {
-        const { username, password } = this.state;
-          this.props.onLoginPressed(username, password);
-      }
-
       signUpPressed = () => {
-        this.props.onSignUpPressed();
+          const { email, password } = this.state;
+        this.props.onSignUpPressed(email,password);
       }
 
     render() {
-        const { username, password } = this.state;
+        const { email, password } = this.state;
         let disabled = false
-        if(username.length==0 || password.length==0)
+        if(email.length==0 || password.length==0)
             disabled = true
         return (
             <View style={styles.container}>
                 <Text style={styles.loginTitle}>
-                    {this.props.userType} {Constants.loginTitle}
+                    Sign Up
                 </Text>
                 <TextInput
                     style= {styles.inputField}
                     placeholder={"Enter Username"}
-                    onChangeText={(username) => this.setState({username})}
-                    value= {this.state.username}
+                    onChangeText={(email) => this.setState({email})}
+                    value= {this.state.email}
                 />
                 <TextInput
                     style= {styles.inputField}
@@ -54,14 +48,8 @@ class loginBox extends React.Component {
                 />
                 <TouchableOpacity
                     style={[styles.submitButton, disabled ? {backgroundColor: 'grey'} : null]}
-                    onPress={this.loginPressed}
-                    disabled={disabled}
-                >
-                    <Text style={styles.submitText}>Sign In</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.submitButton}
                     onPress={this.signUpPressed}
+                    disabled={disabled}
                 >
                     <Text style={styles.submitText}>Sign Up</Text>
                 </TouchableOpacity>
